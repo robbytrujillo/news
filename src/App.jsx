@@ -6,21 +6,24 @@ import axios from 'axios';
 
 const App = () => {
   // hit API
-  const [news, setNews] = useState([]);
+  const [posts, setPosts] = useState([]);
 
-  const getNews = async () => {
+  const getPosts = async () => {
     try {
       const url = "https://berita-indo-api-next.vercel.app/api/cnn-news/olahraga";
       const response = await axios.get(url);
-      console.log(response);
+      setPosts(response?.data?.data?.posts);
+      // console.log(response);
     } catch (error) {
       console.log(error);
     }
   }
 
   useEffect(() => {
-    getNews(); //akan dijalankan ketika pertama kali di render
+    getPosts(); //akan dijalankan ketika pertama kali di render
   }, []);
+
+  console.log(posts);
 
   return (
     <main className="p-5 md:p-10">
@@ -28,10 +31,9 @@ const App = () => {
         Berita Dunia Terkini
       </h1>
       <div className="grid gap-6 mt-12 md:grid-cols-4">
-        <Card />
-        <Card />
-        <Card />
-        <Card />
+        {posts?.map((title, index) => {
+          return <Card key={index} />
+        })}
       </div>
     </main>
   )
